@@ -107,20 +107,20 @@ NEEDS_RELOGIN=false
 if [[ "$CURRENT_USER" != "root" ]] && ! id -nG "$CURRENT_USER" | grep -qw docker; then
     $SUDO usermod -aG docker "$CURRENT_USER"
     NEEDS_RELOGIN=true
-    warn "User ${CURRENT_USER} zur docker-Gruppe hinzugefügt (Re-Login nötig für 'docker' ohne sudo)."
+    info "User ${CURRENT_USER} zur docker-Gruppe hinzugefügt."
 fi
 
-# Für docker compose innerhalb dieses Skripts:
-# - wenn root: $SUDO ist "" -> docker compose direkt
-# - wenn non-root und schon in docker-Gruppe vor Skriptstart: ohne sudo möglich
-# - wenn non-root und gerade erst hinzugefügt: in dieser Shell noch ohne Effekt -> sudo nötig
-if [[ "$CURRENT_USER" == "root" ]]; then
-    DC_SUDO=""
-elif id -nG "$CURRENT_USER" | grep -qw docker && ! $NEEDS_RELOGIN; then
-    DC_SUDO=""
-else
-    DC_SUDO="sudo"
-fi
+# docker compose Aufruf-Wrapper:
+# - root: direkt
+# - non-root, bereits in docker-Gruppe (vor Skriptstart): direkt
+# - non-root, gerade erst hinzugefügt: via 'sg docker -c "..."' (Gruppe in Subshell aktivieren)
+dc() {
+    if [[ "$CURRENT_USER" == "root" ]] || { id -nG "$CURRENT_USER" | grep -qw docker && ! $NEEDS_RELOGIN; }; then
+        docker compose "$@"
+    else
+        sg docker -c "docker compose $*"
+    fi
+}
 
 # -------- 3. Verzeichnisse --------
 step "3/5  Verzeichnisse anlegen"
@@ -160,8 +160,8 @@ ok "/opt/docker/plex/docker-compose.yml erstellt."
 # -------- 5. Container starten --------
 step "5/5  Plex-Container pullen + starten"
 cd /opt/docker/plex
-$DC_SUDO docker compose pull
-$DC_SUDO docker compose up -d
+dc pull
+dc up -d
 ok "Plex läuft."
 
 # -------- Zusammenfassung --------
@@ -186,6 +186,8 @@ echo "  Stop:      cd /opt/docker/plex && docker compose down"
 echo
 $NEEDS_RELOGIN && {
 echo -e "${Y}HINWEIS:${N} '${CURRENT_USER}' wurde der docker-Gruppe hinzugefügt."
-echo "         Einmal abmelden + neu einloggen, dann 'docker' ohne sudo."
+echo "         Für 'docker'-Befehle ohne sudo in der aktuellen Shell:"
+echo "           newgrp docker         # neue Subshell mit aktiver docker-Gruppe"
+echo "         Oder einmal abmelden + neu einloggen (dauerhaft)."
 }
 echo "======================================================================="
