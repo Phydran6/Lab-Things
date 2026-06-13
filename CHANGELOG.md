@@ -4,6 +4,12 @@ Alle nennenswerten Änderungen an diesem Repository werden hier dokumentiert.
 
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
+## [13.06.2026]
+
+### Hinzugefügt
+- `emby-docker-compose.sh`: Setup für Emby Media Server
+  Docker-Stack auf Linux.
+
 ## [Unreleased]
 
 ### Hinzugefügt
