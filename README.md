@@ -11,6 +11,8 @@ in sich abgeschlossen und kann unabhängig verwendet werden.
 | [`plex-docker-compose.sh`](plex-docker-compose.sh) | Plex Media Server via Docker Compose ausrollen (Docker-Installation, Verzeichnisse, Compose-Datei, Container-Start). | Ubuntu Server LTS (22.04 / 24.04) |
 | [`setup-openwebui-ollama.sh`](setup-openwebui-ollama.sh) | Open WebUI + Ollama als CPU-only Docker-Stack aufsetzen (Ollama nur lokal, nur die Web-UI nach außen). | Debian 13 (CPU-only) |
 | [`emby-docker-compose.sh`](emby-docker-compose.sh) | Emby Media Server via Docker Compose ausrollen (Docker-Installation, Verzeichnisse, Compose-Datei, Container-Start). | Distro Unabhängig
+| [`portainer-docker.sh`](emby-docker-compose.sh) | Portainer Instanz via Docker Compose ausrollen (Docker-Installation, Verzeichnisse, Compose-Datei, Container-Start). | Distro Unabhängig
+
 
 ## Verwendung
 
