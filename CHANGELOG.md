@@ -4,6 +4,12 @@ Alle nennenswerten Änderungen an diesem Repository werden hier dokumentiert.
 
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
+## [14.06.2026]
+
+### Hinzugefügt
+- `install-docker.sh`: Setup für Portainer Instanz
+  Docker-Stack auf Linux.
+
 ## [13.06.2026]
 
 ### Hinzugefügt
